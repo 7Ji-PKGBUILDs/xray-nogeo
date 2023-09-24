@@ -9,13 +9,14 @@
 
 pkgname=xray-nogeo
 pkgver=1.8.4
-pkgrel=1
+pkgrel=2
 pkgdesc="The best v2ray-core, with XTLS support, with geoip/site dependency"
 arch=('x86_64' 'aarch64')
 url="https://github.com/XTLS/Xray-core"
 license=('MPL2')
 depends=('glibc')
 makedepends=('go')
+provides=('v2ray')
 source=("xray-${pkgver}.tar.gz::${url}/archive/v${pkgver}.tar.gz"
         "xray.sysusers"
         "xray.tmpfiles"
@@ -28,6 +29,11 @@ sha256sums=('89f73107abba9bd438111edfe921603ddb3c2b631b2716fbdc6be78552f0d322'
             '05d16acd6e00989ece245bf0df919accae858555c7165a50ce2b3db9c0c5a725')
 conflicts=('xray')
 provides=("xray=${pkgver}")
+
+prepare() {
+    cd "${srcdir}"/"Xray-core-${pkgver}"/
+    go mod vendor
+}
 
 build() {
     cd "${srcdir}"/"Xray-core-${pkgver}"/
